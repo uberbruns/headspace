@@ -1,8 +1,8 @@
-- do not spell-out the vector in documentaion as it might change and consumers should not rely on its structure.
+- do not spell-out the vector in documentation as it might change and consumers should not rely on its structure.
 
 ## Model Vector Storage Pattern
 
-Models in `lib/models/` use OpenSCAD vectors as their storage format. Each model type stores its properties as elements in a vector at fixed indices.
+Models in `models/` use OpenSCAD vectors as their storage format. Each model type stores its properties as elements in a vector at fixed indices.
 
 ### Constructor Pattern
 
@@ -26,14 +26,14 @@ Setters are functions named `modelname_propertyname_set()` that take a model vec
 
 ```
 function modelname_propertyname_set(model, value) =
-  modelname_new(...existing properties..., value, ...existing properties...);
+  modelname_new(modelname_otherprop1(model), ..., value, ..., modelname_otherpropN(model));
 ```
 
 Models are immutable; setters return new instances rather than modifying existing ones.
 
 ## Transformation Modules
 
-Transformations in `lib/transformations/` are OpenSCAD modules that modify the context and apply changes to their children.
+Transformations in `transformations/` are OpenSCAD modules that modify the context and apply changes to their children.
 
 ### Pattern
 
@@ -59,7 +59,7 @@ Transformations compose by nesting. Inner transformations receive the context mo
 
 ## File Structure and Naming Conventions
 
-Files in `lib/` follow consistent structural and naming conventions.
+Source files across `models/`, `transformations/`, and `objects/` follow consistent structural and naming conventions.
 
 ### File Layout
 
