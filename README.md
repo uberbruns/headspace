@@ -10,11 +10,11 @@ At the heart of Headspace is the concept of **`$head`** - a special variable tha
 
 A space combines a **position** (the origin point) with **dimensions** (width, depth, height). Use `space_new()` to create spaces and accessor functions like `space_position()` and `space_dimension()` to read their properties.
 
-See [space model](models-space.md) for available operations.
+See [space model](docs/models-space.md) for available operations.
 
 ### The `$head` Variable
 
-`$head` is a special HeadSpace variable that flows through your module tree. Each module can:
+`$head` is a special Headspace variable that flows through your module tree. Each module can:
 1. Read the current `$head` to know what space it's working with
 2. Modify `$head` for its children, passing them a new working space
 
@@ -27,7 +27,7 @@ The most fundamental pattern in Headspace is using panel modules to construct bo
 ### Basic Example
 
 ```openscad
-include <lib/headspace.scad>
+include <headspace.scad>
 
 // Start with an initial space
 $head = space_new(
@@ -144,9 +144,9 @@ The subdivision modules divide a space into multiple sections along a specific a
 ```openscad
 // Horizontal division along X axis - sections distributed round-robin to children
 columns([FLEX(), FLEX(), FLEX()]) {
-  drawer();  // Gets sections 0, 3, 6, ...
-  drawer();  // Gets sections 1, 4, 7, ...
-  drawer();  // Gets sections 2, 5, 8, ...
+  drawer();  // Gets section 0
+  drawer();  // Gets section 1
+  drawer();  // Gets section 2
 }
 
 // Vertical division along Z axis with different weights
@@ -170,7 +170,7 @@ Subdivision modules accept the following section formats:
 - **Numbers** - Absolute dimensions in mm (e.g., `200` for 200mm)
 - **`FLEX()`** - Flexible section with weight 1 (shares remaining space equally with other FLEX() sections)
 - **`FLEX(weight)`** - Flexible section with custom weight (e.g., `FLEX(2)` gets twice as much space as `FLEX(1)`)
-- **`ABS(value)`** - Explicit absolute section (equivalent to a number, but more readable)
+- **`ABS(value)`** - Explicit absolute section (equivalent to a number, but accepts additional parameters)
 - **`DIV()`** - Divider section using material thickness from context
 
 #### Default Behavior: Round-Robin Distribution
@@ -184,7 +184,7 @@ This makes it easy to repeat the same component across multiple sections.
 
 #### Section Object Assignment with `obj`
 
-Sections can specify which child object they belong to using the `obj` parameter:
+Sections can specify which child object they belong to using the `obj` parameter. Assigning `obj` on even a single section disables round-robin distribution; every child is then matched only by explicit `obj` assignment, and unassigned sections render nothing.
 
 ```openscad
 // Assign sections to specific children using obj property
@@ -290,7 +290,7 @@ size(width=200, height=100) {
 Here's a complete example showing multiple concepts:
 
 ```openscad
-include <lib/headspace.scad>
+include <headspace.scad>
 
 $head = space_new(
   width=2000,
@@ -358,7 +358,7 @@ material(MDF(18)) {
 
 ### Paint and Texture
 - **`paint(color, alpha, layer)`** - Sets paint color with layer system
-- **`texture_new()`** - Creates a texture (see [texture model](models-texture.md))
+- **`texture_new()`** - Creates a texture (see [texture model](docs/models-texture.md))
 - Layer 0: Base colors (used by panels)
 - Layer 1+: Overlays (higher layers override lower layers)
 
@@ -375,7 +375,7 @@ save() paint("Red") panel(TOP) restore() panel(BACK);
 
 ## Functions Reference
 
-- **`space_new()`** - Creates a space (see [space model](models-space.md))
+- **`space_new()`** - Creates a space (see [space model](docs/models-space.md))
 - **`context_current()`** - Returns the current context from the stack
 
 ## Constants Reference
@@ -388,26 +388,26 @@ save() paint("Red") panel(TOP) restore() panel(BACK);
 
 ### Objects
 
-- [panel](objects-panel.md) - Panel creation with veneer support
+- [panel](docs/objects-panel.md) - Panel creation with veneer support
 
 ### Transformations
 
-- [context](transformations-context.md) - Context stack management (save, restore, update)
-- [in](transformations-in.md) - Set custom `$head` space
-- [inset](transformations-inset.md) - Relative space adjustments
-- [material](transformations-material.md) - Set context material
-- [move](transformations-move.md) - Move space position
-- [name](transformations-name.md) - Hierarchical naming (name, push_name, pop_name)
-- [paint](transformations-paint.md) - Set paint color
-- [size](transformations-size.md) - Absolute dimensions with alignment
-- [subdivide](transformations-subdivide.md) - Space division (columns, rows, lanes)
-- [texture](transformations-texture.md) - Set texture
+- [context](docs/transformations-context.md) - Context stack management (save, restore, update)
+- [in](docs/transformations-in.md) - Set custom `$head` space
+- [inset](docs/transformations-inset.md) - Relative space adjustments
+- [material](docs/transformations-material.md) - Set context material
+- [move](docs/transformations-move.md) - Move space position
+- [name](docs/transformations-name.md) - Hierarchical naming (name, push_name, pop_name)
+- [paint](docs/transformations-paint.md) - Set paint color
+- [size](docs/transformations-size.md) - Absolute dimensions with alignment
+- [subdivide](docs/transformations-subdivide.md) - Space division (columns, rows, lanes)
+- [texture](docs/transformations-texture.md) - Set texture
 
 ### Models
 
-- [alignment](models-alignment.md) - Alignment constants and type checking
-- [context](models-context.md) - Context vector with stack operations
-- [material](models-material.md) - Material properties (thickness, texture, veneer)
-- [section](models-section.md) - Section definitions (ABS, FLEX, DIV)
-- [space](models-space.md) - Space vector (position and dimensions)
-- [texture](models-texture.md) - Texture vector (color, alpha, layer)
+- [alignment](docs/models-alignment.md) - Alignment constants and type checking
+- [context](docs/models-context.md) - Context vector with stack operations
+- [material](docs/models-material.md) - Material properties (thickness, texture, veneer)
+- [section](docs/models-section.md) - Section definitions (ABS, FLEX, DIV)
+- [space](docs/models-space.md) - Space vector (position and dimensions)
+- [texture](docs/models-texture.md) - Texture vector (color, alpha, layer)
