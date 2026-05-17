@@ -300,16 +300,15 @@ $head = space_new(
 
 push_name("Shelf Unit") {
   // Create outer box
-  panel([BOTTOM, LEFT, RIGHT, BACK]) {
+  panel([TOP, BOTTOM, LEFT, RIGHT, BACK]) {
 
     // Divide into 3 vertical sections
     rows([600, FLEX(), 400]) {
 
       // Bottom cabinet with door
       push_name("Bottom Cabinet")
-        panel([BOTTOM, TOP])
-          inset(left=3, right=3, top=3, bottom=3)
-            panel(FRONT);
+        inset(left=3, right=3, top=3, bottom=3)
+          push_name("Door") panel(FRONT);
 
       // Open shelves in middle
       rows([FLEX()], repeat=3)
@@ -318,7 +317,8 @@ push_name("Shelf Unit") {
 
       // Top cabinet
       push_name("Top Cabinet")
-        panel([BOTTOM, TOP, FRONT]);
+        inset(left=3, right=3, top=3, bottom=3)
+          push_name("Door") panel([BOTTOM, FRONT]);
     }
   }
 }
