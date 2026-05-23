@@ -175,26 +175,26 @@ Subdivision modules accept the following section formats:
 
 #### Default Behavior: Round-Robin Distribution
 
-When no `obj` parameters are specified on sections, subdivision modules distribute sections round-robin across children. This means:
+When no `i` parameters are specified on sections, subdivision modules distribute sections round-robin across children. This means:
 - Child 0 gets sections 0, 3, 6, 9, ...
 - Child 1 gets sections 1, 4, 7, 10, ...
 - Child 2 gets sections 2, 5, 8, 11, ...
 
 This makes it easy to repeat the same component across multiple sections.
 
-#### Section Object Assignment with `obj`
+#### Section Child Assignment with `i`
 
-Sections can specify which child object they belong to using the `obj` parameter. Assigning `obj` on even a single section disables round-robin distribution; every child is then matched only by explicit `obj` assignment, and unassigned sections render nothing.
+Sections can specify which child they belong to using the `i` parameter. Assigning `i` on even a single section disables round-robin distribution; every child is then matched only by explicit `i` assignment, and unassigned sections render nothing.
 
 ```openscad
-// Assign sections to specific children using obj property
-columns([FLEX(obj=0), DIV(obj=1), FLEX(obj=0)]) {
-  drawer();      // Gets sections 0 and 2 (both have obj=0)
-  divider();     // Gets section 1 (has obj=1)
+// Assign sections to specific children using i parameter
+columns([FLEX(i=0), DIV(i=1), FLEX(i=0)]) {
+  drawer();      // Gets sections 0 and 2 (both have i=0)
+  divider();     // Gets section 1 (has i=1)
 }
 
-// Skip sections by not assigning them to any object
-rows([FLEX(obj=0), 50, FLEX(obj=0)]) {
+// Skip sections by not assigning them to any child
+rows([FLEX(i=0), 50, FLEX(i=0)]) {
   shelf();  // Gets sections 0 and 2, section 1 (50mm) is unassigned
 }
 ```
@@ -210,7 +210,7 @@ rows([FLEX()], repeat=5) {
 }
 
 // Create 5 shelves with dividers between them
-rows([FLEX(obj=0)], repeat=5, insert=[DIV(obj=1)]) {
+rows([FLEX(i=0)], repeat=5, insert=[DIV(i=1)]) {
   // Result: [FLEX, DIV, FLEX, DIV, FLEX, DIV, FLEX, DIV, FLEX]
   shelf();    // Gets sections 0, 2, 4, 6, 8 (the FLEX sections)
   divider();  // Gets sections 1, 3, 5, 7 (the DIV sections)
@@ -330,7 +330,7 @@ push_name("Shelf Unit") {
 2. **Order determines structure** - Nesting order defines how components fit together
 3. **Panels consume space** - Each panel reduces the available `$head` space
 4. **Subdivision distributes sections** - `columns()`, `rows()`, `lanes()` divide space and assign sections to children
-5. **`obj` for section assignment** - Use `obj` parameter on sections to assign them to specific children
+5. **`i` for section assignment** - Use `i` parameter on sections to assign them to specific children
 6. **`repeat` and `insert` for patterns** - Repeat sections with optional inserted elements
 7. **Context names hierarchically** - `push_name()` builds automatic naming paths
 
@@ -380,9 +380,9 @@ save() paint("Red") panel(TOP) restore() panel(BACK);
 
 ## Constants Reference
 
-- **`FLEX(weight, obj)`** - Flexible section with optional weight (default: 1) and object assignment
-- **`ABS(value, obj)`** - Absolute section with explicit value and optional object assignment
-- **`DIV(obj)`** - Divider section using material thickness from context, with optional object assignment
+- **`FLEX(weight, i)`** - Flexible section with optional weight (default: 1) and child assignment
+- **`ABS(value, i)`** - Absolute section with explicit value and optional child assignment
+- **`DIV(i)`** - Divider section using material thickness from context, with optional child assignment
 
 ## API Reference
 

@@ -86,7 +86,7 @@ panel(BOTTOM) {
     panel(LEFT) {
       panel(RIGHT) {
         // Create 3 compartments, bottom one shares outer bottom panel
-        rows([FLEX()], repeat=3, insert=[FLEX(obj=0)]) {
+        rows([FLEX()], repeat=3, insert=[FLEX(i=0)]) {
           panel(BOTTOM); // Creates bottom panels for middle and top compartments only
         }
       }

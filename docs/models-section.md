@@ -9,13 +9,13 @@ Sections define how space is divided by the subdivision modules (`columns()`, `r
 Creates a section vector.
 
 ```openscad
-section = section_new(raw_type, value, obj=undef);
+section = section_new(raw_type, value, child_index=undef);
 ```
 
 **Parameters:**
 - `raw_type` - Type string ("ABS" or "FLEX()")
 - `value` - Numeric value (dimension for "ABS", weight for "FLEX()")
-- `obj` - Object index (default: `undef`)
+- `child_index` - Child index (default: `undef`)
 
 **Returns:** Section vector
 
@@ -26,19 +26,19 @@ section = section_new(raw_type, value, obj=undef);
 Creates an absolute-dimension section.
 
 ```openscad
-section = ABS(value, obj=undef);
+section = ABS(value, i=undef);
 ```
 
 **Parameters:**
 - `value` - Absolute dimension in mm
-- `obj` - Object index (default: `undef`)
+- `i` - Child index (default: `undef`)
 
 **Returns:** Section vector
 
 **Example:**
 ```openscad
 ABS(100) // 100mm absolute section
-ABS(50, obj=0) // 50mm section assigned to child 0
+ABS(50, i=0) // 50mm section assigned to child 0
 ```
 
 ### FLEX()
@@ -46,12 +46,12 @@ ABS(50, obj=0) // 50mm section assigned to child 0
 Creates a flexible section with proportion weight.
 
 ```openscad
-section = FLEX(weight=1, obj=undef);
+section = FLEX(weight=1, i=undef);
 ```
 
 **Parameters:**
 - `weight` - Proportion weight (default: 1)
-- `obj` - Object index (default: `undef`)
+- `i` - Child index (default: `undef`)
 
 **Returns:** Section vector
 
@@ -59,7 +59,7 @@ section = FLEX(weight=1, obj=undef);
 ```openscad
 FLEX() // Weight 1
 FLEX(weight=2) // Gets twice the space of weight 1
-FLEX(weight=1, obj=0) // Assigned to child 0
+FLEX(weight=1, i=0) // Assigned to child 0
 ```
 
 ### DIV()
@@ -67,11 +67,11 @@ FLEX(weight=1, obj=0) // Assigned to child 0
 Creates a divider section using context material thickness.
 
 ```openscad
-section = DIV(obj=undef);
+section = DIV(i=undef);
 ```
 
 **Parameters:**
-- `obj` - Object index (default: `undef`)
+- `i` - Child index (default: `undef`)
 
 **Returns:** Section vector with thickness from `context_material(context_current())`
 
@@ -104,13 +104,13 @@ value = section_value(section);
 
 Returns numeric value (dimension for "ABS", weight for "FLEX()").
 
-### section_obj()
+### section_child_index()
 
 ```openscad
-obj = section_obj(section);
+child_index = section_child_index(section);
 ```
 
-Returns object index (may be `undef`).
+Returns child index (may be `undef`).
 
 ## Type Checking
 
@@ -132,11 +132,11 @@ Returns `true` if section type is "FLEX()".
 
 ## Usage
 
-Object index mapping:
+Child index mapping:
 ```openscad
-columns([ABS(50, obj=1), FLEX(obj=0), ABS(50, obj=1)]) {
-  paint("Red") block();   // obj=0 → FLEX section
-  paint("Blue") block();  // obj=1 → both ABS sections
+columns([ABS(50, i=1), FLEX(i=0), ABS(50, i=1)]) {
+  paint("Red") block();   // i=0 → FLEX section
+  paint("Blue") block();  // i=1 → both ABS sections
 }
 ```
 

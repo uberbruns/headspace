@@ -28,17 +28,17 @@ lanes(sections, space=$head, repeat=1, insert=[]) children();
 
 ## Section Types
 
-**ABS(value, obj)** - Absolute dimension in mm
-**FLEX(weight, obj)** - Flexible section with proportion weight (default weight: 1)
-**DIV(obj)** - Divider using context material thickness
+**ABS(value, i)** - Absolute dimension in mm
+**FLEX(weight, i)** - Flexible section with proportion weight (default weight: 1)
+**DIV(i)** - Divider using context material thickness
 
 ## Section Distribution
 
-Sections are distributed to children based on the `obj` parameter.
+Sections are distributed to children based on the `i` parameter.
 
 ### Round-Robin Distribution (default)
 
-When no `obj` parameters are specified, sections distribute round-robin:
+When no `i` parameters are specified, sections distribute round-robin:
 
 ```openscad
 columns([FLEX(), FLEX(), FLEX(), FLEX()]) {
@@ -50,14 +50,14 @@ columns([FLEX(), FLEX(), FLEX(), FLEX()]) {
 Child 0 gets sections at indices 0, 2, 4, 6, ...
 Child 1 gets sections at indices 1, 3, 5, 7, ...
 
-### Object Mapping
+### Child Index Mapping
 
-When any section has `obj` defined, distribution switches to object-based mapping. Sections with `obj` go to the corresponding child index. Sections without `obj` are excluded.
+When any section has `i` defined, distribution switches to index-based mapping. Sections with `i` go to the corresponding child index. Sections without `i` are excluded.
 
 ```openscad
-columns([ABS(50, obj=1), FLEX(obj=0), ABS(50, obj=1)]) {
-  paint("Red") block();   // Child 0 gets FLEX (obj=0)
-  paint("Blue") block();  // Child 1 gets both ABS (obj=1)
+columns([ABS(50, i=1), FLEX(i=0), ABS(50, i=1)]) {
+  paint("Red") block();   // Child 0 gets FLEX (i=0)
+  paint("Blue") block();  // Child 1 gets both ABS (i=1)
 }
 ```
 
@@ -104,32 +104,32 @@ With 3 repetitions:
 - Pattern: `sections + insert + sections + insert + sections`
 - Result: 3 section blocks, 2 insert blocks
 
-## Combining Repeat, Insert, and Obj
+## Combining Repeat, Insert, and i
 
 Using all three parameters together enables powerful patterns:
 
 ```openscad
-rows([FLEX(obj=0)], repeat=4, insert=[DIV(obj=1)]) {
-  // Creates: [FLEX(obj=0), DIV(obj=1), FLEX(obj=0), DIV(obj=1),
-  //           FLEX(obj=0), DIV(obj=1), FLEX(obj=0)]
-  paint("Blue") block();   // Gets all 4 FLEX sections (obj=0)
-  paint("Gray") block();   // Gets all 3 DIV sections (obj=1)
+rows([FLEX(i=0)], repeat=4, insert=[DIV(i=1)]) {
+  // Creates: [FLEX(i=0), DIV(i=1), FLEX(i=0), DIV(i=1),
+  //           FLEX(i=0), DIV(i=1), FLEX(i=0)]
+  paint("Blue") block();   // Gets all 4 FLEX sections (i=0)
+  paint("Gray") block();   // Gets all 3 DIV sections (i=1)
 }
 ```
 
 Pattern breakdown:
-1. `repeat=4` creates 4 copies of `[FLEX(obj=0)]`
-2. `insert=[DIV(obj=1)]` places dividers between them
+1. `repeat=4` creates 4 copies of `[FLEX(i=0)]`
+2. `insert=[DIV(i=1)]` places dividers between them
 3. Result: 4 FLEX sections + 3 DIV sections
-4. Child 0 (obj=0) renders all FLEX sections as a single block
-5. Child 1 (obj=1) renders all DIV sections as a single block
+4. Child 0 (i=0) renders all FLEX sections as a single block
+5. Child 1 (i=1) renders all DIV sections as a single block
 
 Practical cabinet example:
 ```openscad
 panel(BOTTOM) {
   panel(TOP) {
     // 3 shelves, bottom one shares outer bottom panel
-    rows([FLEX()], repeat=3, insert=[DIV(obj=0)]) {
+    rows([FLEX()], repeat=3, insert=[DIV(i=0)]) {
       panel(BOTTOM); // Only middle and top compartments get bottom panels
     }
   }
@@ -166,7 +166,7 @@ columns([ABS(100), FLEX(), ABS(150)]) {
 Shelves with material dividers:
 ```openscad
 material(MDF(16)) {
-  rows([FLEX()], repeat=5, insert=[DIV(obj=0)]) {
+  rows([FLEX()], repeat=5, insert=[DIV(i=0)]) {
     panel(BOTTOM);  // Creates 4 shelf panels between 5 compartments
   }
 }
@@ -174,8 +174,8 @@ material(MDF(16)) {
 
 Drawers with fixed spacing:
 ```openscad
-columns([FLEX(obj=0), ABS(20)], repeat=3) {
-  // Creates: [FLEX(obj=0), 20, FLEX(obj=0), 20, FLEX(obj=0), 20]
+columns([FLEX(i=0), ABS(20)], repeat=3) {
+  // Creates: [FLEX(i=0), 20, FLEX(i=0), 20, FLEX(i=0), 20]
   drawer(); // Gets all 3 FLEX sections, 20mm gaps are unassigned
 }
 ```
