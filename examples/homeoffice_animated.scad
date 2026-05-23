@@ -28,7 +28,7 @@ module bottom_storage() {
     panel(BOTTOM) {
       panel(TOP, material=OAK_DESKTOP) {
         panel([LEFT, RIGHT]) panel(BACK, material=MDF_BACK) {
-          inset(width=6, height=6) columns([FLEX(obj=0)], repeat=2, insert=[3]) {
+          inset(width=6, height=6) columns([FLEX(i=0)], repeat=2, insert=[3]) {
             material(MULTIPLEX) panel(FRONT);
           }
         }
@@ -46,7 +46,7 @@ module open_compartment() {
 module top_storage() {
   name("Top Storage") {
     panel([TOP, LEFT, RIGHT]) panel(BACK, material=MDF_BACK) {
-      columns([FLEX(obj=0)], repeat=2, insert=[DIV(obj=1)]) {
+      columns([FLEX(i=0)], repeat=2, insert=[DIV(i=1)]) {
         material(MULTIPLEX) inset(width=6, height=6) panel(FRONT);
         panel(LEFT);
       }
@@ -60,7 +60,7 @@ module center() {
       panel(TOP, material=OAK_DESKTOP) panel(BACK);
       panel(TOP, material=OAK_DESKTOP) panel(BACK, material=OAK_BACK);
       panel([TOP]) panel(BACK, material=OAK_BACK) {
-        material(OAK_DESKTOP) rows([FLEX()], repeat=2, insert=[DIV(obj=0)]) {
+        material(OAK_DESKTOP) rows([FLEX()], repeat=2, insert=[DIV(i=0)]) {
           panel(TOP);
         }
       }
@@ -69,7 +69,7 @@ module center() {
 }
 
 update(context_render_depth_set(context_current(), render_depth)) {
-  in(room) material(MULTIPLEX) columns([FLEX(obj=0), ABS(1400, obj=1), FLEX(obj=0)]) {
+  in(room) material(MULTIPLEX) columns([FLEX(i=0), ABS(1400, i=1), FLEX(i=0)]) {
     // Sides
     rows([800, 700, FLEX()]) {
       // Bottom Storage

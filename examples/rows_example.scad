@@ -23,7 +23,7 @@ in(space_new(width=100, depth=100, height=1000)) move(right=150) {
 in(space_new(width=100, depth=100, height=1000)) move(right=300) {
   material(MDF(16)) {
     panel([BOTTOM, TOP, LEFT, RIGHT]) {
-      rows([FLEX()], repeat=3, insert=[DIV(obj=0)]) {
+      rows([FLEX()], repeat=3, insert=[DIV(i=0)]) {
         paint("LightBlue", alpha=0.5) panel(BOTTOM); // Shelves
       }
     }

@@ -54,7 +54,7 @@ module _panel_left(thickness, name, material) {
     material(material) push_name(name) {
       size(width=thickness, alignment=LEFT) {
         panel_space = $head;
-        columns([ABS(material_veneer_front(material), obj=0), FLEX(obj=1), ABS(material_veneer_back(material), obj=0)]) {
+        columns([ABS(material_veneer_front(material), i=0), FLEX(i=1), ABS(material_veneer_back(material), i=0)]) {
           texture(material_veneer_texture(material)) block(echo_enabled=false);
           paint("Red", layer=0) block(echo_space=panel_space);
         }
@@ -72,7 +72,7 @@ module _panel_right(thickness, name, material) {
     material(material) push_name(name) {
       size(width=thickness, alignment=RIGHT) {
         panel_space = $head;
-        columns([ABS(material_veneer_back(material), obj=0), FLEX(obj=1), ABS(material_veneer_front(material), obj=0)]) {
+        columns([ABS(material_veneer_back(material), i=0), FLEX(i=1), ABS(material_veneer_front(material), i=0)]) {
           texture(material_veneer_texture(material)) block(echo_enabled=false);
           paint("Red", layer=0) block(echo_space=panel_space);
         }
@@ -90,7 +90,7 @@ module _panel_top(thickness, name, material) {
     material(material) push_name(name) {
       size(height=thickness, alignment=TOP) {
         panel_space = $head;
-        rows([ABS(material_veneer_back(material), obj=0), FLEX(obj=1), ABS(material_veneer_front(material), obj=0)]) {
+        rows([ABS(material_veneer_back(material), i=0), FLEX(i=1), ABS(material_veneer_front(material), i=0)]) {
           texture(material_veneer_texture(material)) block(echo_enabled=false);
           paint("Blue", layer=0) block(echo_space=panel_space);
         }
@@ -108,7 +108,7 @@ module _panel_bottom(thickness, name, material) {
     material(material) push_name(name) {
       size(height=thickness, alignment=BOTTOM) {
         panel_space = $head;
-        rows([ABS(material_veneer_front(material), obj=0), FLEX(obj=1), ABS(material_veneer_back(material), obj=0)]) {
+        rows([ABS(material_veneer_front(material), i=0), FLEX(i=1), ABS(material_veneer_back(material), i=0)]) {
           texture(material_veneer_texture(material)) block(echo_enabled=false);
           paint("Blue", layer=0) block(echo_space=panel_space);
         }
@@ -126,7 +126,7 @@ module _panel_front(thickness, name, material) {
     material(material) push_name(name) {
       size(depth=thickness, alignment=FRONT) {
         panel_space = $head;
-        lanes([ABS(material_veneer_front(material), obj=0), FLEX(obj=1), ABS(material_veneer_back(material), obj=0)]) {
+        lanes([ABS(material_veneer_front(material), i=0), FLEX(i=1), ABS(material_veneer_back(material), i=0)]) {
           texture(material_veneer_texture(material)) block(echo_enabled=false);
           paint("Green", layer=0) block(echo_space=panel_space);
         }
@@ -144,7 +144,7 @@ module _panel_back(thickness, name, material) {
     material(material) push_name(name) {
       size(depth=thickness, alignment=BACK) {
         panel_space = $head;
-        lanes([ABS(material_veneer_front(material), obj=0), FLEX(obj=1), ABS(material_veneer_back(material), obj=0)]) {
+        lanes([ABS(material_veneer_front(material), i=0), FLEX(i=1), ABS(material_veneer_back(material), i=0)]) {
           texture(material_veneer_texture(material)) block(echo_enabled=false);
           paint("Green", layer=0) block(echo_space=panel_space);
         }

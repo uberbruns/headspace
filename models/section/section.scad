@@ -4,27 +4,27 @@ include <../context/context.scad>
 include <../material/material.scad>
 
 // Function: section_new()
-// Synopsis: Creates a section vector from raw_type, value, and obj parameters.
+// Synopsis: Creates a section vector from raw_type, value, and child_index parameters.
 // Description:
 //   Constructs a section vector. This is the canonical constructor for creating
 //   section vectors programmatically.
 // Arguments:
 //   raw_type = Section raw_type, either "ABS" or "FLEX()"
 //   value = Section value (absolute dimension for "ABS", weight for "FLEX()")
-//   obj = Object index to assign to this section. Default: undef
+//   child_index = Child index to assign to this section. Default: undef
 // Returns:
 //   Section vector
-function section_new(raw_type, value, obj = undef) = [raw_type, value, obj];
+function section_new(raw_type, value, child_index = undef) = [raw_type, value, child_index];
 
 // Special section constants
 
 // Function: DIV()
 // Synopsis: Creates a divider section with thickness from context material.
 // Arguments:
-//   obj = Object index to assign to this section. Default: undef
+//   i = Child index to assign to this section. Default: undef
 // Returns:
 //   Section vector with thickness from the context material
-function DIV(obj = undef) = section_new(raw_type="ABS", value=material_thickness(context_material(context_current())), obj=obj);
+function DIV(i = undef) = section_new(raw_type="ABS", value=material_thickness(context_material(context_current())), child_index=i);
 
 // Function: FLEX()
 // Synopsis: Creates a flexible section with a specified proportion weight.
@@ -34,10 +34,10 @@ function DIV(obj = undef) = section_new(raw_type="ABS", value=material_thickness
 //   will receive twice as much space as a weight of 1.
 // Arguments:
 //   weight = Proportion weight for this flexible section (default: 1)
-//   obj = Object index to assign to this section. Default: undef
+//   i = Child index to assign to this section. Default: undef
 // Returns:
 //   Section vector
-function FLEX(weight=1, obj = undef) = section_new(raw_type="FLEX()", value=weight, obj=obj);
+function FLEX(weight=1, i = undef) = section_new(raw_type="FLEX()", value=weight, child_index=i);
 
 // Function: ABS()
 // Synopsis: Creates an absolute section with a specified value.
@@ -47,10 +47,10 @@ function FLEX(weight=1, obj = undef) = section_new(raw_type="FLEX()", value=weig
 //   and consistent with FLEX() usage.
 // Arguments:
 //   value = Absolute dimension value in millimeters
-//   obj = Object index to assign to this section. Default: undef
+//   i = Child index to assign to this section. Default: undef
 // Returns:
 //   Section vector
-function ABS(value, obj = undef) = section_new(raw_type="ABS", value=value, obj=obj);
+function ABS(value, i = undef) = section_new(raw_type="ABS", value=value, child_index=i);
 
 // Function: section_raw_type()
 // Synopsis: Extracts the raw_type from a section vector.
@@ -74,16 +74,16 @@ function section_raw_type(section) = section[0];
 //   Numeric value (dimension for "ABS", weight for "FLEX()")
 function section_value(section) = section[1];
 
-// Function: section_obj()
-// Synopsis: Extracts the object index from a section vector.
+// Function: section_child_index()
+// Synopsis: Extracts the child index from a section vector.
 // Description:
-//   Returns the object index component of a section vector. This index specifies which
+//   Returns the child index component of a section vector. This index specifies which
 //   child object should be rendered in this section.
 // Arguments:
 //   section = Section vector
 // Returns:
-//   Object index (integer) or undef if not set
-function section_obj(section) = section[2];
+//   Child index (integer) or undef if not set
+function section_child_index(section) = section[2];
 
 // Function: section_is_abs()
 // Synopsis: Checks if a section is an absolute section.

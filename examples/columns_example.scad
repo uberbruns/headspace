@@ -19,10 +19,10 @@ move(top=150) in(space_new(width=1000, depth=100, height=100)) {
   }
 }
 
-// Example 3: Using repeat and insert with obj assignment
+// Example 3: Using repeat and insert with i assignment
 move(top=300) in(space_new(width=1000, depth=100, height=100)) {
   material(MDF(16)) {
-    columns([FLEX(obj=0)], repeat=4, insert=[DIV(obj=1)]) {
+    columns([FLEX(i=0)], repeat=4, insert=[DIV(i=1)]) {
       paint("LightBlue", alpha=0.5) block();  // 4 flexible sections
       paint("Gray", alpha=0.8) block();       // 3 dividers
     }

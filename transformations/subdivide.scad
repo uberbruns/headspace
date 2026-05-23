@@ -6,8 +6,8 @@ include <../models/section/sections_resolved.scad>
 // Synopsis: Divides a space along the X axis (width).
 // Description:
 //   Divides a space horizontally into sections along the X axis.
-//   Sections are distributed to children based on the obj property of each section,
-//   or round-robin if no obj properties are defined.
+//   Sections are distributed to children based on the i property of each section,
+//   or round-robin if no i properties are defined.
 // Arguments:
 //   sections = Sections array for division along X axis
 //   space = Space to divide. Default: $head
@@ -36,8 +36,8 @@ module columns(sections, space = $head, repeat = 1, insert = []) {
 // Synopsis: Divides a space along the Y axis (depth).
 // Description:
 //   Divides a space along the Y axis into sections.
-//   Sections are distributed to children based on the obj property of each section,
-//   or round-robin if no obj properties are defined.
+//   Sections are distributed to children based on the i property of each section,
+//   or round-robin if no i properties are defined.
 // Arguments:
 //   sections = Sections array for division along Y axis
 //   space = Space to divide. Default: $head
@@ -66,8 +66,8 @@ module lanes(sections, space = $head, repeat = 1, insert = []) {
 // Synopsis: Divides a space along the Z axis (height).
 // Description:
 //   Divides a space vertically into sections along the Z axis.
-//   Sections are distributed to children based on the obj property of each section,
-//   or round-robin if no obj properties are defined.
+//   Sections are distributed to children based on the i property of each section,
+//   or round-robin if no i properties are defined.
 // Arguments:
 //   sections = Sections array for division along Z axis
 //   space = Space to divide. Default: $head
@@ -115,7 +115,7 @@ function _generate_repeated_sections(sections, repeat = 1, insert = []) =
 // Synopsis: Generates the effective map for distributing sections to children.
 // Description:
 //   Takes sections and children count, and returns a normalized map distributed
-//   across children using round-robin or based on obj properties.
+//   across children using round-robin or based on i properties.
 // Arguments:
 //   sections = Sections array
 //   children_count = Number of children to distribute to
@@ -125,39 +125,39 @@ function _generate_effective_map(sections, children_count) =
   _distribute_roundrobin(_generate_map_automatically(sections), children_count);
 
 // Function: _sections_have_object_defined()
-// Synopsis: Checks if any section has a defined obj property.
+// Synopsis: Checks if any section has a defined i property.
 // Description:
-//   Returns true if at least one section in the list has an obj property that is not undef.
+//   Returns true if at least one section in the list has an i property that is not undef.
 // Arguments:
 //   sections = Sections array
 // Returns:
-//   Boolean: true if any section has a defined obj, false otherwise
+//   Boolean: true if any section has a defined i, false otherwise
 function _sections_have_object_defined(sections) =
-  len([for (s = sections) if (section_obj(s) != undef) true]) > 0;
+  len([for (s = sections) if (section_child_index(s) != undef) true]) > 0;
 
 // Function: _sections_max_object_index()
-// Synopsis: Returns the highest object index in a list of sections.
+// Synopsis: Returns the highest child index in a list of sections.
 // Description:
-//   Finds and returns the maximum object index among all sections that have a defined obj property.
+//   Finds and returns the maximum child index among all sections that have a defined i property.
 // Arguments:
 //   sections = Sections array
 // Returns:
-//   Integer: highest object index, or 0 if no sections have a defined obj
+//   Integer: highest child index, or 0 if no sections have a defined i
 function _sections_max_object_index(sections) =
-  let(object_indices = [for (s = sections) if (section_obj(s) != undef) section_obj(s)])
+  let(object_indices = [for (s = sections) if (section_child_index(s) != undef) section_child_index(s)])
   len(object_indices) > 0 ? max(object_indices) : 0;
 
 // Function: _generate_map_from_object_properties()
-// Synopsis: Generates a map based on obj properties of sections.
+// Synopsis: Generates a map based on i properties of sections.
 // Description:
-//   Creates a map where each index corresponds to an object index, and the list at that index
-//   contains all section indices that have that obj property value.
+//   Creates a map where each index corresponds to a child index, and the list at that index
+//   contains all section indices that have that i property value.
 // Arguments:
 //   sections = Sections array
 // Returns:
-//   List of lists, where each inner list contains section indices for that object index
+//   List of lists, where each inner list contains section indices for that child index
 // Example:
-//   For sections [FLEX(obj=1), FLEX(obj=0), FLEX(obj=1)]:
+//   For sections [FLEX(i=1), FLEX(i=0), FLEX(i=1)]:
 //   _generate_map_from_object_properties returns [[1], [0, 2]]
 function _generate_map_from_object_properties(sections) =
   let(
@@ -167,7 +167,7 @@ function _generate_map_from_object_properties(sections) =
   [
     for (object_index = [0:count - 1])
       [for (section_index = [0:len(sections) - 1])
-        if (section_obj(sections[section_index]) == object_index)
+        if (section_child_index(sections[section_index]) == object_index)
           section_index
       ]
   ];
@@ -175,12 +175,12 @@ function _generate_map_from_object_properties(sections) =
 // Function: _generate_map_automatically()
 // Synopsis: Generates a map from sections automatically.
 // Description:
-//   Creates a map based on sections. If any section has a defined obj property,
+//   Creates a map based on sections. If any section has a defined i property,
 //   uses _generate_map_from_object. Otherwise, generates sequential indices.
 // Arguments:
 //   sections = Sections array
 // Returns:
-//   List of integers or list of lists depending on whether sections have obj properties
+//   List of integers or list of lists depending on whether sections have i properties
 function _generate_map_automatically(sections) =
   _sections_have_object_defined(sections)
     ? _generate_map_from_object_properties(sections)
